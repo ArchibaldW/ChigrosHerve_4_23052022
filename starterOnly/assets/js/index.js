@@ -57,6 +57,5 @@ radios.forEach(radio => {
     radio.addEventListener('change', () => displayField("radio",radios))
 })
 
-
 // Form Validation when submit
 form.addEventListener("submit", validateForm)
