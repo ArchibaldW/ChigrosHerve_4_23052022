@@ -19,12 +19,42 @@ export function validateForm(e) {
 }
 
 /**
+ * Adding change or blur listeners to form fields
+ */
+export function addChangeListeners(){
+    const first = document.getElementById("first");
+    first.addEventListener("blur", () => displayField("text",first))
+
+    const last = document.getElementById("last")
+    last.addEventListener("blur", () => displayField("text",last))
+
+
+    const email = document.getElementById("email")
+    email.addEventListener("blur", () => displayField("email",email))
+
+
+    const birthdate = document.getElementById("birthdate")
+    birthdate.addEventListener("blur", () => displayField("date",birthdate))
+
+
+    const quantity = document.getElementById("quantity")
+    quantity.addEventListener("blur", () => displayField("number",quantity))
+
+
+    const radios = document.querySelectorAll("input[name='location']")
+    let prev = null;
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => displayField("radio",radios))
+    })
+}
+
+/**
  * Displaying or removing error message from a specific field with a specific type
  * @param {string} type 
  * @param {DomElement | Array<DomElement>} field 
  * @return {Boolean} - Is the field is valid
  */
-export function displayField(type, field) {
+function displayField(type, field) {
     let isValid = false;
 
     if (validateField(type, field)) {
