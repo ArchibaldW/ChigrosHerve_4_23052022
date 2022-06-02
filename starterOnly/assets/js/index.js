@@ -1,4 +1,4 @@
-import {validateForm, displayField} from "./formValidation.js"
+import {validateForm, addChangeListeners} from "./formValidation.js"
 
 function editNav() {
     var x = document.getElementById("myTopnav");
@@ -32,30 +32,7 @@ function closeModal() {
 }
 
 // Form Validation when change
-const first = document.getElementById("first");
-first.addEventListener("blur", () => displayField("text",first))
-
-const last = document.getElementById("last")
-last.addEventListener("blur", () => displayField("text",last))
-
-
-const email = document.getElementById("email")
-email.addEventListener("blur", () => displayField("email",email))
-
-
-const birthdate = document.getElementById("birthdate")
-birthdate.addEventListener("blur", () => displayField("date",birthdate))
-
-
-const quantity = document.getElementById("quantity")
-quantity.addEventListener("blur", () => displayField("number",quantity))
-
-
-const radios = document.querySelectorAll("input[name='location']")
-let prev = null;
-radios.forEach(radio => {
-    radio.addEventListener('change', () => displayField("radio",radios))
-})
+addChangeListeners()
 
 // Form Validation when submit
 form.addEventListener("submit", validateForm)
