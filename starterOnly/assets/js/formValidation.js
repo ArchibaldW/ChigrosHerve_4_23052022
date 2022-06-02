@@ -31,6 +31,8 @@ export function displayField(type, field) {
         if (type == "radio") {
             field[0].parentElement.querySelector(".alert_form").style.display = "none"
         } else {
+            if (type != "checkbox"){
+            }
             field.parentElement.querySelector(".alert_form").style.display = "none"
         }
         isValid = true;
@@ -38,6 +40,12 @@ export function displayField(type, field) {
         if (type == "radio") {
             field[0].parentElement.querySelector(".alert_form").style.display = "block"
         } else {
+            if (type != "checkbox"){
+                field.classList.add("bounce")
+                setTimeout(function() {
+                    field.classList.remove("bounce")
+                }, 1000); 
+            }
             field.parentElement.querySelector(".alert_form").style.display = "block"
         }
     }

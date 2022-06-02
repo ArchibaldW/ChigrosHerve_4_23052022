@@ -5,6 +5,50 @@
   margin-bottom: 10px;
 }
 
+.bounce {
+  outline: 0;
+  border-color: red;
+  animation-name: bounce;
+  animation-duration: .5s;
+  animation-delay: 0.25s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translate(0px);
+    timing-function: ease-in;
+  }
+  37% {
+    transform: translate(5px);
+    timing-function: ease-out;
+  }
+  55% {
+    transform: translate(-5px);
+    timing-function: ease-in;
+  }
+  73% {
+    transform: translate(4px);
+    timing-function: ease-out;
+  }
+  82% {
+    transform: translate(-4px);
+    timing-function: ease-in;
+  }
+  91% {
+    transform: translate(2px);
+    timing-function: ease-out;
+  }
+  96% {
+    transform: translate(-2px);
+    timing-function: ease-in;
+  }
+  100% {
+    transform: translate(0px);
+    timing-function: ease-in;
+  }
+}
+
+
 :root {
   --font-default: "DM Sans", Arial, Helvetica, sans-serif;
   --font-slab: var(--font-default);
