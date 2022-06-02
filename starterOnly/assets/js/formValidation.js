@@ -43,7 +43,6 @@ export function addChangeListeners(){
 
     const radios = document.querySelectorAll("input[name='location']")
     radios.forEach(radio => {
-        
         radio.addEventListener('change', () => displayField("radio",radios))
     })
 }
