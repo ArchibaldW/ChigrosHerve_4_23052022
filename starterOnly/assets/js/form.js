@@ -50,18 +50,17 @@ export function addChangeListeners(){
 /**
  * Displaying or removing error message from a specific field with a specific type
  * @param {string} type 
- * @param {DomElement | Array<DomElement>} field 
+ * @param {Element | null | NodeList} field 
  * @return {Boolean} - Is the field is valid
  */
 function displayField(type, field) {
+    console.log(field)
     let isValid = false;
 
     if (validateField(type, field)) {
         if (type == "radio") {
             field[0].parentElement.querySelector(".alert_form").style.display = "none"
         } else {
-            if (type != "checkbox"){
-            }
             field.parentElement.querySelector(".alert_form").style.display = "none"
         }
         isValid = true;
@@ -85,7 +84,7 @@ function displayField(type, field) {
 /**
  * Check if the field is valid for a given type and returns true or false
  * @param {string} type 
- * @param {DomElement | Array<DomElement>} field 
+ * @param {Element | null | NodeList} field 
  * @return {Boolean} - Is the field is valid
  */
 function validateField(type, field) {

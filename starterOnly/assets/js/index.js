@@ -1,4 +1,5 @@
-import {validateForm, addChangeListeners} from "./formValidation.js"
+import {validateForm, addChangeListeners} from "./form.js"
+import {setupModal} from './modal.js'
 
 function editNav() {
     var x = document.getElementById("myTopnav");
@@ -9,28 +10,9 @@ function editNav() {
     }
 }
 
-// DOM Elements
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const closeModalBtn = document.getElementById("close")
+setupModal()
+
 const form = document.getElementById("form")
-
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-
-// launch modal form
-function launchModal() {
-    modalbg.style.display = "block";
-}
-
-// Close modal event
-closeModalBtn.addEventListener("click", closeModal)
-
-// Close modal form
-function closeModal() {
-    modalbg.style.display = "none";
-}
-
 // Form Validation when change
 addChangeListeners()
 
