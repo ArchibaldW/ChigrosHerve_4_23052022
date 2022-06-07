@@ -5,9 +5,21 @@
   margin-bottom: 10px;
 }
 
-.bounce {
+.alert_form.is_wrong {
+  display: block;
+}
+
+.form_ok {
   outline: 0;
-  border-color: red;
+  border: solid 3px green;
+}
+
+.form_wrong{
+  outline: 0;
+  border: solid 3px red;
+}
+
+.bounce {
   animation-name: bounce;
   animation-duration: .5s;
   animation-delay: 0.25s;
@@ -18,30 +30,37 @@
     transform: translate(0px);
     timing-function: ease-in;
   }
+
   37% {
     transform: translate(5px);
     timing-function: ease-out;
   }
+
   55% {
     transform: translate(-5px);
     timing-function: ease-in;
   }
+
   73% {
     transform: translate(4px);
     timing-function: ease-out;
   }
+
   82% {
     transform: translate(-4px);
     timing-function: ease-in;
   }
+
   91% {
     transform: translate(2px);
     timing-function: ease-out;
   }
+
   96% {
     transform: translate(-2px);
     timing-function: ease-in;
   }
+
   100% {
     transform: translate(0px);
     timing-function: ease-in;
