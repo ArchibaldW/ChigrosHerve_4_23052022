@@ -1,3 +1,5 @@
+import { buildFailureTestResult } from "@jest/test-result";
+
 /**
  * Global fonction for forom validation, checking all the required fields and submiting if all good
  * @param {Event} e 
@@ -54,10 +56,23 @@ export function addChangeListeners() {
  * @return {Boolean} - Is the field is valid
  */
 function displayField(type, field) {
-    let {
-        isValid,
-        message
-    } = validateField(type, field);
+    let isValid = false;
+    let message = null;
+    let validateReturn = null;
+    if (type != "checkbox" && type != "radio"){
+        validateReturn = validateField(type, field.value);
+    } else if (type == "checkbox") {
+        validateReturn = validateField(type, field.checked)
+    } else if (type == "radio") {
+        let radioValid = buildFailureTestResult
+        field.forEach(radio => {
+            if (radio.checked === true) radioValid = true;
+        })
+        validateReturn = validateField(type, radioValid)
+    }
+
+    isValid = validateReturn.isValid;
+    message = validateReturn.message;
 
     let alert_form = type == "radio" ? field[0].parentElement.querySelector(".alert_form") : field.parentElement.querySelector(".alert_form")
 
@@ -68,18 +83,20 @@ function displayField(type, field) {
                 setTimeout(function () {
                     field.classList.remove("bounce");
                 }, 1000);
-                field.addEventListener("input", () => displayField(type, field));
+                field.addEventListener("input", () => {
+                    displayField(type, field)
+                    // if (isValid) field.removeEventListener('input', displayField)
+                });
             }
             field.classList.remove("form_ok");
             field.classList.add("form_wrong");
         }
         alert_form.classList.add("is_wrong");
         alert_form.textContent = message;
+        console.log(message)
     } else {
         if (type != "checkbox" && type != "radio") {
-            if (alert_form.classList.contains("is_wrong")) {
-                // field.removeEventListener("input", inputOnField())
-            }
+            if (alert_form.classList.contains("is_wrong")) {}
             field.classList.remove("form_wrong")
             field.classList.add("form_ok")
         }
@@ -96,7 +113,7 @@ function displayField(type, field) {
  * @param {Element | null | NodeList} field 
  * @return {Boolean} - Is the field is valid
  */
-function validateField(type, field) {
+function validateField(type, value) {
     let isValid = false
     let message = null
     switch (type) {
@@ -104,7 +121,7 @@ function validateField(type, field) {
          * Checking if the text field have 2 or more characters
          */
         case "text":
-            if (field.value.length >= 2) isValid = true;
+            if (value.length >= 2) isValid = true;
             else message = "Veuillez entrer 2 caractères ou plus.";
             break;
 
@@ -118,7 +135,7 @@ function validateField(type, field) {
              */
         case "email":
             const emailRegex = /^[a-z]([.-]{0,1}[a-z0-9]+)*@[a-z0-9]([.-]{0,1}[a-z0-9]+)*\.[a-z0-9]{2,4}$/g;
-            if (emailRegex.test(field.value)) isValid = true;
+            if (emailRegex.test(value)) isValid = true;
             else message = "Veuillez entrer une adresse email valide.";
             break;
 
@@ -130,7 +147,7 @@ function validateField(type, field) {
              */
         case "date":
             let dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$/;
-            if (dateRegex.test(field.value)) isValid = true;
+            if (dateRegex.test(value)) isValid = true;
             else message = "Veuillez entrer une date valide.";
             break;
 
@@ -140,7 +157,7 @@ function validateField(type, field) {
              */
         case "number":
             let numberRegex = /^[0-9]+$/;
-            if (numberRegex.test(field.value)) isValid = true;
+            if (numberRegex.test(value)) isValid = true;
             else message = "Veuillez entrer un nombre valide.";
             break;
 
@@ -148,17 +165,19 @@ function validateField(type, field) {
              * Checking if one radio button is checked
              */
         case "radio":
-            field.forEach(radio => {
-                if (radio.checked === true) isValid = true;
-            })
-            if (!isValid) message = "Veuillez choisir au moins une ville."
+            if (value) isValid = true;
+            else message = "Veuillez choisir au moins une ville."
+            // field.forEach(radio => {
+            //     if (radio.checked === true) isValid = true;
+            // })
+            // if (!isValid) 
             break;
 
             /**
              * Checking if the checkbox input is checked
              */
         case "checkbox":
-            if (field.checked) isValid = true;
+            if (value) isValid = true;
             else message = "Vous devez accepter les termes et conditions."
             break;
 
@@ -180,3 +199,5 @@ function validateField(type, field) {
 function validationModal() {
     document.getElementsByClassName("modal-body")[0].innerHTML = "<div>Merci, votre reservation a bien été recue</div>"
 }
+
+module.exports = validateField
