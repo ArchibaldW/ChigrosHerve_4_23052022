@@ -1,20 +1,23 @@
-import {validateForm, addChangeListeners} from "./form.js"
-import {setupModal} from './modal.js'
+import { validateForm, addChangeListeners } from './form';
+import setupModal from './modal';
 
 function editNav() {
-    var x = document.getElementById("myTopnav");
-    if (x.className === "topnav") {
-        x.className += " responsive";
-    } else {
-        x.className = "topnav";
-    }
+  const x = document.getElementById('myTopnav');
+  if (x.className === 'topnav') {
+    x.className += ' responsive';
+  } else {
+    x.className = 'topnav';
+  }
 }
 
-setupModal()
+const navBtn = document.getElementById('navbarBtn');
+navBtn.addEventListener('click', editNav);
 
-const form = document.getElementById("form")
+setupModal();
+
+const form = document.getElementById('form');
 // Form Validation when change
-addChangeListeners()
+addChangeListeners();
 
 // Form Validation when submit
-form.addEventListener("submit", validateForm)
+form.addEventListener('submit', validateForm);
