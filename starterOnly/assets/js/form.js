@@ -61,6 +61,8 @@ export function validateDate(date) {
 }
 
 /**
+ * @param {number} number
+ * @returns {Object}
  * Checking number iunput value with a Regex :
  * - One or more number
  */
@@ -78,6 +80,56 @@ export function validateNumber(number) {
 }
 
 /**
+ * @param {Element} radio
+ * @returns {Object}
+ * Checking if one radio button is checked
+ */
+export function validateRadio(radio) {
+  let isValid = false;
+  let message = '';
+  radio.forEach(button => {
+    if (button.checked === true) isValid = true;
+    else message = 'Veuillez choisir au moins une ville.'
+  })
+  return {
+    isValid,
+    message,
+  };
+}
+
+/**
+ * @param {Element} checkbox
+ * @returns {Object}
+ * Checking if the checkbox input is checked
+ */
+export function validateCheckbox(checkbox) {
+  const isValid = checkbox.checked
+  let message = ''
+  if (!isValid) {
+    message = 'Vous devez accepter les termes et conditions.';
+  }
+  return {
+    isValid,
+    message,
+  };
+}
+
+/**
+ * Get the type of input
+ * @param {Element} field 
+ * @return {string}
+ */
+function getType(field){
+  let type = null
+  if (field.length) {
+    type = 'radio';
+  } else {
+    type = field.getAttribute('type');
+  }
+  return type
+}
+
+/**
  * Check if the field is valid for a given type and returns true or false
  * @param {string} type
  * @param {Element | null | NodeList} field
@@ -85,7 +137,7 @@ export function validateNumber(number) {
  */
 export function validateField(field) {
   let returnValue = null;
-  const type = field.getAttribute('type');
+  const type = getType(field);
   switch (type) {
     case 'text':
       returnValue = validateText(field.value);
@@ -103,20 +155,13 @@ export function validateField(field) {
       returnValue = validateNumber(field.value);
       break;
 
-      /**
-       * Checking if one radio button is checked
-       */
+
     case 'radio':
-      if (value) isValid = true;
-      else message = 'Veuillez choisir au moins une ville.';
+      returnValue = validateRadio(field);
       break;
 
-      /**
-       * Checking if the checkbox input is checked
-       */
     case 'checkbox':
-      if (value) isValid = true;
-      else message = 'Vous devez accepter les termes et conditions.';
+      returnValue = validateCheckbox(field);
       break;
 
       /**
@@ -135,23 +180,10 @@ export function validateField(field) {
  * @return {Boolean} - Is the field is valid
  */
 function displayField(field) {
-  let isValid = false;
-  let message = null;
-  let validateReturn = null;
-  const type = field.getAttribute('type');
-  if (type !== 'checkbox' && type !== 'radio') {
-    validateReturn = validateField(field);
-  } else if (type === 'checkbox') {
-    validateReturn = validateField(field);
-  } else if (type === 'radio') {
-    let radioValid = false;
-    field.forEach((radio) => {
-      if (radio.checked === true) radioValid = true;
-    });
-    validateReturn = validateField(radioValid);
-  }
-  isValid = validateReturn.isValid;
-  message = validateReturn.message;
+  const validateReturn = validateField(field);
+  const isValid = validateReturn.isValid;
+  const message = validateReturn.message;
+  const type = getType(field);
 
   const alertForm = type === 'radio' ? field[0].parentElement.querySelector('.alert_form') : field.parentElement.querySelector('.alert_form');
 
@@ -196,8 +228,8 @@ export function validateForm(e) {
   const isValidRadio = displayField(document.querySelectorAll("input[name='location']"));
   const isValidCheckbox = displayField(document.getElementById('checkbox1'));
 
-  if (isValidFirst && isValidLast && isValidEmail && isValidBirthdate
-    && isValidQuantity && isValidRadio && isValidCheckbox) {
+  if (isValidFirst && isValidLast && isValidEmail && isValidBirthdate &&
+    isValidQuantity && isValidRadio && isValidCheckbox) {
     document.getElementById('form').reset();
   }
 }

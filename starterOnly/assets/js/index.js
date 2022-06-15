@@ -1,5 +1,5 @@
-import { validateForm, addChangeListeners } from './form';
-import setupModal from './modal';
+import { validateForm, addChangeListeners } from './form.js';
+import setupModal from './modal.js';
 
 function editNav() {
   const x = document.getElementById('myTopnav');
