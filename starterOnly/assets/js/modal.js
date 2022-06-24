@@ -2,7 +2,7 @@ export default function setupModal() {
   // DOM Elements
   const modalbg = document.querySelector('.bground');
   const modalBtn = document.querySelectorAll('.modal-btn');
-  const closeModalBtn = document.getElementById('close');
+  const closeModalBtn = document.querySelectorAll('.close-btn');
 
   // launch modal form
   function launchModal() {
@@ -15,8 +15,9 @@ export default function setupModal() {
   // Close modal form
   function closeModal() {
     modalbg.style.display = 'none';
+    document.getElementById('modal-body').classList.remove('form-valid');
   }
 
   // Close modal event
-  closeModalBtn.addEventListener('click', closeModal);
+  closeModalBtn.forEach((btn) => btn.addEventListener('click', closeModal));
 }

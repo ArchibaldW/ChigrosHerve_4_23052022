@@ -3,11 +3,10 @@ import {
   validateEmail,
   validateDate,
   validateNumber,
-} from './form';
+} from './form.js';
 
 describe('Test validateField', () => {
-  test('text', () => {
-    expect(validateText('qsdfdsfz').isValid).toBe(true);
+  it('Format text should be valid', () => {
     expect(validateText('qsdfdsfz').isValid).toBe(true);
     expect(validateText('s').isValid).toBe(false);
     expect(validateText('').isValid).toBe(false);
@@ -28,7 +27,7 @@ describe('Test validateField', () => {
 
   test('date', () => {
     expect(validateDate('1920-10-31').isValid).toBe(true);
-    expect(validateDate('2099-02-31').isValid).toBe(true); // Il faudrait que ce soit faux
+    expect(validateDate('2099-02-31').isValid).toBe(false);
     expect(validateDate('1800-10-20').isValid).toBe(false); // Year between 1900 et 2099
     expect(validateDate('1980-15-20').isValid).toBe(false); // Month between 1 et 12
     expect(validateDate('1980-09-60').isValid).toBe(false); // Day between 1 et 31

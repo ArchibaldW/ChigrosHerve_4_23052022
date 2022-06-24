@@ -26,7 +26,7 @@ export function validateText(text) {
  * - Domain name have between 2 and 4 characters
  */
 export function validateEmail(email) {
-  const emailRegex = /^[a-z]([.-]{0,1}[a-z0-9]+)*@[a-z0-9]([.-]{0,1}[a-z0-9]+)*\.[a-z0-9]{2,4}$/g;
+  const emailRegex = /^[a-z]([.-]{0,1}[a-z0-9]+)*@[a-z0-9]([.-]{0,1}[a-z0-9]+)*\.[a-z0-9]{2,4}$/i;
   const isValid = emailRegex.test(email);
   let message = '';
   if (!isValid) {
@@ -39,17 +39,44 @@ export function validateEmail(email) {
 }
 
 /**
- * @param {string} email
+ * Add a 0 before an unique Digit number
+ * @param {any} n
+ * @return {any} - Exemple : 9 => 09 | 19 => 19
+ */
+
+function twoDigit(n) {
+  if (n < 10) {
+    return 0 + n;
+  }
+  return n;
+}
+
+/**
+ * Return a formated date from a specific Date Object
+ * @param {Date} date
+ * @return {string} - Exemple : "2022-01-06"
+ */
+
+function formatDate(date) {
+  return [date.getFullYear(), twoDigit(date.getMonth() + 1), twoDigit(date.getDate())].join('-');
+}
+
+/**
+ * @param {string} date
  * @returns {Object}
  * Checking date input value with a Regex :
  * - Years between 1900 or 2099
  * - Months between 1 and 12
- * - Days between 1 and 31 (maybe need a more powerfull
- *    Regex for month with less than 31 days)
+ * - Days between 1 and 31
+ * - Checking if the date is valid (1991-02-31 is not valid)
  */
 export function validateDate(date) {
   const dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$/;
-  const isValid = dateRegex.test(date);
+  let isValid = false;
+  if (dateRegex.test(date)) {
+    const testDate = new Date(date);
+    isValid = formatDate(testDate) === date;
+  }
   let message = '';
   if (!isValid) {
     message = 'Veuillez entrer une date valide.';
@@ -87,10 +114,10 @@ export function validateNumber(number) {
 export function validateRadio(radio) {
   let isValid = false;
   let message = '';
-  radio.forEach(button => {
+  radio.forEach((button) => {
     if (button.checked === true) isValid = true;
-    else message = 'Veuillez choisir au moins une ville.'
-  })
+    else message = 'Veuillez choisir au moins une ville.';
+  });
   return {
     isValid,
     message,
@@ -103,8 +130,8 @@ export function validateRadio(radio) {
  * Checking if the checkbox input is checked
  */
 export function validateCheckbox(checkbox) {
-  const isValid = checkbox.checked
-  let message = ''
+  const isValid = checkbox.checked;
+  let message = '';
   if (!isValid) {
     message = 'Vous devez accepter les termes et conditions.';
   }
@@ -116,17 +143,11 @@ export function validateCheckbox(checkbox) {
 
 /**
  * Get the type of input
- * @param {Element} field 
+ * @param {Element} field
  * @return {string}
  */
-function getType(field){
-  let type = null
-  if (field.length) {
-    type = 'radio';
-  } else {
-    type = field.getAttribute('type');
-  }
-  return type
+function getType(field) {
+  return field.length ? 'radio' : field.getAttribute('type');
 }
 
 /**
@@ -135,7 +156,7 @@ function getType(field){
  * @param {Element | null | NodeList} field
  * @return {Object} - Is the field is valid
  */
-export function validateField(field) {
+function validateField(field) {
   let returnValue = null;
   const type = getType(field);
   switch (type) {
@@ -154,7 +175,6 @@ export function validateField(field) {
     case 'number':
       returnValue = validateNumber(field.value);
       break;
-
 
     case 'radio':
       returnValue = validateRadio(field);
@@ -181,8 +201,12 @@ export function validateField(field) {
  */
 function displayField(field) {
   const validateReturn = validateField(field);
-  const isValid = validateReturn.isValid;
-  const message = validateReturn.message;
+  const {
+    isValid,
+  } = validateReturn;
+  const {
+    message,
+  } = validateReturn;
   const type = getType(field);
 
   const alertForm = type === 'radio' ? field[0].parentElement.querySelector('.alert_form') : field.parentElement.querySelector('.alert_form');
@@ -214,6 +238,17 @@ function displayField(field) {
 }
 
 /**
+ * Change the modal body for the confirmation message
+ */
+function validationModal() {
+  document.getElementById('modal-body').classList.add('form-valid');
+  document.getElementById('form').reset();
+  document.querySelectorAll('.form_ok').forEach((element) => {
+    element.classList.remove('form_ok');
+  });
+}
+
+/**
  * Global fonction for forom validation, checking all the required fields and submiting if all good
  * @param {Event} e
  */
@@ -228,18 +263,23 @@ export function validateForm(e) {
   const isValidRadio = displayField(document.querySelectorAll("input[name='location']"));
   const isValidCheckbox = displayField(document.getElementById('checkbox1'));
 
-  if (isValidFirst && isValidLast && isValidEmail && isValidBirthdate &&
-    isValidQuantity && isValidRadio && isValidCheckbox) {
-    document.getElementById('form').reset();
+  if (isValidFirst && isValidLast && isValidEmail && isValidBirthdate
+    && isValidQuantity && isValidRadio && isValidCheckbox) {
+    validationModal();
   }
 }
 
-function addInputListeners(input) {
-  input.addEventListener('blur', () => displayField(input));
-  input.addEventListener('input', () => {
-    if (input.classList.contains('form_wrong') || input.classList.contains('form_ok')) {
-      displayField(input);
-    }
+/**
+ * @param {Element} input
+ */
+function addInputsListeners(inputs) {
+  inputs.forEach((input) => {
+    input.addEventListener('blur', () => displayField(input));
+    input.addEventListener('input', () => {
+      if (input.classList.contains('form_wrong') || input.classList.contains('form_ok')) {
+        displayField(input);
+      }
+    });
   });
 }
 
@@ -248,29 +288,14 @@ function addInputListeners(input) {
  */
 export function addChangeListeners() {
   const first = document.getElementById('first');
-  addInputListeners(first);
-
   const last = document.getElementById('last');
-  addInputListeners(last);
-
   const email = document.getElementById('email');
-  addInputListeners(email);
-
   const birthdate = document.getElementById('birthdate');
-  addInputListeners(birthdate);
-
   const quantity = document.getElementById('quantity');
-  addInputListeners(quantity);
+  addInputsListeners([first, last, email, birthdate, quantity]);
 
   const radios = document.querySelectorAll("input[name='location']");
   radios.forEach((radio) => {
     radio.addEventListener('change', () => displayField(radios));
   });
-}
-
-/**
- * Change the modal body for the confirmation message
- */
-function validationModal() {
-  document.getElementsByClassName('modal-body')[0].innerHTML = '<div>Merci, votre reservation a bien été recue</div>';
 }
