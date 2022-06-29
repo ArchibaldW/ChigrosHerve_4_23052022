@@ -9,6 +9,11 @@
   display: block;
 }
 
+#submit_alert{
+  margin-top: 10px;
+  text-align: center;
+}
+
 .form_ok {
   outline: 0;
   border: solid 3px green;

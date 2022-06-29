@@ -221,6 +221,7 @@ function displayField(field) {
         }, 1000);
       }
       field.classList.remove('form_ok');
+      document.getElementById('submit_alert').classList.add('is_wrong');
       field.classList.add('form_wrong');
     }
     alertForm.classList.add('is_wrong');
