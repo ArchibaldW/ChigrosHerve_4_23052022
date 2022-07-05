@@ -54,7 +54,7 @@ export function validateDate(date) {
   if (date && testDate !== 'Invalid Date' && testDate < new Date()) {
     isValid = true;
   } else if (testDate >= new Date()) {
-    message = 'Vous ne pouvez pas entrer une date ulterieure à aujourd\'hui';
+    message = 'Vous ne pouvez pas entrer une date ulterieure ou égale à aujourd\'hui';
   } else {
     message = 'Veuillez entrer une date valide.';
   }
