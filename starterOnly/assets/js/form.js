@@ -39,29 +39,6 @@ export function validateEmail(email) {
 }
 
 /**
- * Add a 0 before an unique Digit number
- * @param {any} n
- * @return {any} - Exemple : 9 => 09 | 19 => 19
- */
-
-function twoDigit(n) {
-  if (n < 10) {
-    return 0 + n;
-  }
-  return n;
-}
-
-/**
- * Return a formated date from a specific Date Object
- * @param {Date} date
- * @return {string} - Exemple : "2022-01-06"
- */
-
-function formatDate(date) {
-  return [date.getFullYear(), twoDigit(date.getMonth() + 1), twoDigit(date.getDate())].join('-');
-}
-
-/**
  * @param {string} date
  * @returns {Object}
  * Checking date input value with a Regex :
@@ -71,14 +48,14 @@ function formatDate(date) {
  * - Checking if the date is valid (1991-02-31 is not valid)
  */
 export function validateDate(date) {
-  const dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$/;
   let isValid = false;
-  if (dateRegex.test(date)) {
-    const testDate = new Date(date);
-    isValid = formatDate(testDate) === date;
-  }
   let message = '';
-  if (!isValid) {
+  const testDate = new Date(date);
+  if (date && testDate !== 'Invalid Date' && testDate < new Date()) {
+    isValid = true;
+  } else if (testDate >= new Date()) {
+    message = 'Vous ne pouvez pas entrer une date ulterieure à aujourd\'hui';
+  } else {
     message = 'Veuillez entrer une date valide.';
   }
   return {
@@ -230,6 +207,9 @@ function displayField(field) {
     if (type !== 'checkbox' && type !== 'radio') {
       field.classList.remove('form_wrong');
       field.classList.add('form_ok');
+      if (document.querySelector('.form_wrong') === null) {
+        document.getElementById('submit_alert').classList.remove('is_wrong');
+      }
     }
     alertForm.classList.remove('is_wrong');
     alertForm.textContent = null;

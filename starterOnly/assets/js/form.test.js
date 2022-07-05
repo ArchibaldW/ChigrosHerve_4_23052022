@@ -27,13 +27,10 @@ describe('Test validateField', () => {
 
   test('date', () => {
     expect(validateDate('1920-10-31').isValid).toBe(true);
+    expect(validateDate('1800-10-20').isValid).toBe(true);
     expect(validateDate('2099-02-31').isValid).toBe(false);
-    expect(validateDate('1800-10-20').isValid).toBe(false); // Year between 1900 et 2099
     expect(validateDate('1980-15-20').isValid).toBe(false); // Month between 1 et 12
     expect(validateDate('1980-09-60').isValid).toBe(false); // Day between 1 et 31
-    expect(validateDate('1980-9-7').isValid).toBe(false); // Two digits day and month
-    expect(validateDate('190-08-09').isValid).toBe(false); // Four digits years
-    expect(validateDate('01/02/1910').isValid).toBe(false); // Valid format : xxxx-xx-xx
     expect(validateDate('').isValid).toBe(false);
   });
 
